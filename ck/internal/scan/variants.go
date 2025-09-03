@@ -10,6 +10,7 @@ import (
 	"github.com/selimozcann/cachekeyhunter/ck/internal/types"
 )
 
+// GenerateHeaderVariants loads headers from wordlist and builds header-based variants
 func GenerateHeaderVariants(wordlistPath string) []types.Variant {
 	var variants []types.Variant
 
@@ -21,6 +22,7 @@ func GenerateHeaderVariants(wordlistPath string) []types.Variant {
 		})
 	}
 
+	// Add hardcoded Forwarded and X-Forwarded-Proto variants
 	variants = append(variants,
 		types.Variant{
 			Name: fmt.Sprintf("%s: host=%s", constants.HeaderForwarded, constants.DefaultExampleDomain),
@@ -39,6 +41,7 @@ func GenerateHeaderVariants(wordlistPath string) []types.Variant {
 	return variants
 }
 
+// GenerateQueryVariants loads query params from wordlist and builds query-based variants
 func GenerateQueryVariants(wordlistPath string) []types.Variant {
 	var variants []types.Variant
 
@@ -56,6 +59,7 @@ func GenerateQueryVariants(wordlistPath string) []types.Variant {
 	return variants
 }
 
+// loadLines reads a file line-by-line and returns non-empty trimmed lines
 func loadLines(path string) ([]string, error) {
 	f, err := os.Open(path)
 	if err != nil {
@@ -73,3 +77,4 @@ func loadLines(path string) ([]string, error) {
 	}
 	return lines, scanner.Err()
 }
+

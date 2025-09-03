@@ -13,8 +13,10 @@ import (
 func main() {
 	url := flag.String("u", "", "Target URL")
 	flag.StringVar(url, "url", "", "Target URL")
+
 	headers := flag.String("w", "", "Path to header wordlist")
 	flag.StringVar(headers, "wordlist", "", "Path to header wordlist")
+
 	params := flag.String("q", "", "Path to query param wordlist")
 	flag.StringVar(params, "query", "", "Path to query param wordlist")
 
@@ -38,11 +40,15 @@ func main() {
 		return
 	}
 
+	// Load header variants
 	variants := scan.GenerateHeaderVariants(*headers)
+
+	// Load param variants if provided
 	if *params != "" {
 		variants = append(variants, scan.GenerateQueryVariants(*params)...)
 	}
 
+	// Scan with all variants
 	for _, v := range variants {
 		sig, err := scan.DoVariant(*url, v)
 		if err != nil {
@@ -58,3 +64,4 @@ func main() {
 		report.PrintFinding(finding)
 	}
 }
+
