@@ -22,5 +22,5 @@ go build ./cmd/cachekeyhunter
 ## Usage
 
 ```bash
-go run ./cmd/cachekeyhunter -u https://example.com/page -w wordlists/headers.txt -q wordlists/params.txt
+$ go run ./ck/cmd/cachekeyhunter -u https://example.com -w ck/wordlists/headers.txt
 ```
