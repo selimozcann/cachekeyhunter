@@ -13,27 +13,42 @@ import (
 func main() {
 	url := flag.String("u", "", "Target URL")
 	flag.StringVar(url, "url", "", "Target URL")
-	wordlist := flag.String("w", "", "Path to header or parameter wordlist")
-	flag.StringVar(wordlist, "wordlist", "", "Path to header or parameter wordlist")
+
+	headers := flag.String("w", "", "Path to header wordlist")
+	flag.StringVar(headers, "wordlist", "", "Path to header wordlist")
+
+	params := flag.String("q", "", "Path to query param wordlist")
+	flag.StringVar(params, "query", "", "Path to query param wordlist")
 
 	flag.Parse()
 
-	if *url == "" || *wordlist == "" {
-		fmt.Fprintf(os.Stderr, "Usage: %s -u <url> -w <wordlist>\n", os.Args[0])
+	if *url == "" || *headers == "" {
+		fmt.Fprintf(os.Stderr, "Usage: %s -u <url> -w <headers> [-q <params>]\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	fmt.Printf("Starting cache key scan on %s using %s\n", *url, *wordlist)
+	if *params != "" {
+		fmt.Printf("Starting cache key scan on %s using headers %s and params %s\n", *url, *headers, *params)
+	} else {
+		fmt.Printf("Starting cache key scan on %s using headers %s\n", *url, *headers)
+	}
 
-	base, err := scan.GetBaseLİne(*url)
+	base, err := scan.GetBaseline(*url)
 	if err != nil {
 		fmt.Println("Baseline error:", err)
 		return
 	}
 
-	variants := scan.GenerateVariants(*wordlist)
+	// Load header variants
+	variants := scan.GenerateHeaderVariants(*headers)
 
+	// Load param variants if provided
+	if *params != "" {
+		variants = append(variants, scan.GenerateQueryVariants(*params)...)
+	}
+
+	// Scan with all variants
 	for _, v := range variants {
 		sig, err := scan.DoVariant(*url, v)
 		if err != nil {
@@ -49,3 +64,4 @@ func main() {
 		report.PrintFinding(finding)
 	}
 }
+
