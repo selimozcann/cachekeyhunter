@@ -23,16 +23,9 @@ const (
 
 // Default values
 const (
-	DefaultAttackerDomain  = "attacker.example"
+	DefaultExampleDomain   = "example.com"
 	DefaultProto           = "http"
 	DefaultForwardedPrefix = "host="
-)
-
-// Human-readable variant names
-const (
-	NameXForwardedHost  = "X-Forwarded-Host: attacker.example"
-	NameForwarded       = "Forwarded: host=attacker.example"
-	NameXForwardedProto = "X-Forwarded-Proto: http"
 )
 
 const (
