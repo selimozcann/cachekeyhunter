@@ -10,27 +10,14 @@ import (
 	"github.com/selimozcann/cachekeyhunter/ck/internal/types"
 )
 
-func GenerateVariants() []types.Variant {
+func GenerateHeaderVariants(wordlistPath string) []types.Variant {
 	var variants []types.Variant
 
-	headers, _ := loadLines("wordlists/headers.txt")
-	for _, h := range headers {
+	lines, _ := loadLines(wordlistPath)
+	for _, line := range lines {
 		variants = append(variants, types.Variant{
-			Name:    fmt.Sprintf("%s: %s", h, constants.DefaultExampleDomain),
-			Headers: map[string]string{h: constants.DefaultExampleDomain},
-		})
-	}
-
-	params, _ := loadLines("wordlists/params.txt")
-	for _, p := range params {
-		parts := strings.SplitN(p, "=", 2)
-		if len(parts) != 2 {
-			continue
-		}
-		key, val := parts[0], parts[1]
-		variants = append(variants, types.Variant{
-			Name:  fmt.Sprintf("Query %s=%s", key, val),
-			Query: map[string]string{key: val},
+			Name:    fmt.Sprintf("%s: %s", line, constants.DefaultExampleDomain),
+			Headers: map[string]string{line: constants.DefaultExampleDomain},
 		})
 	}
 
@@ -49,6 +36,23 @@ func GenerateVariants() []types.Variant {
 		},
 	)
 
+	return variants
+}
+
+func GenerateQueryVariants(wordlistPath string) []types.Variant {
+	var variants []types.Variant
+
+	lines, _ := loadLines(wordlistPath)
+	for _, line := range lines {
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) == 2 {
+			key, val := parts[0], parts[1]
+			variants = append(variants, types.Variant{
+				Name:  fmt.Sprintf("Query %s=%s", key, val),
+				Query: map[string]string{key: val},
+			})
+		}
+	}
 	return variants
 }
 
