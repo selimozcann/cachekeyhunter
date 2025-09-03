@@ -24,3 +24,11 @@ go build ./cmd/cachekeyhunter
 ```bash
 $ go run ./ck/cmd/cachekeyhunter -u https://example.com -w ck/wordlists/headers.txt
 ```
+
+## Legal Disclaimer
+ 
+This project is intended for educational and research purposes only.
+- Do not use CacheKeyHunter against systems you do not own or have explicit permission to test.
+- The authors assume no liability for any misuse or damage caused by this tool.
+- By using CacheKeyHunter, you agree that you are solely responsible for your actions and compliance with applicable laws.
+
