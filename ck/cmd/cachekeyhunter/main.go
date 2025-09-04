@@ -22,7 +22,7 @@ func main() {
 
 	flag.Parse()
 
-	if *url == "" || *headers == "" {
+	if *url == "" || (*headers == "" && *params == "") {
 		fmt.Fprintf(os.Stderr, "Usage: %s -u <url> -w <headers> [-q <params>]\n", os.Args[0])
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -64,4 +64,3 @@ func main() {
 		report.PrintFinding(finding)
 	}
 }
-
