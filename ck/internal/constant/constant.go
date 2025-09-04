@@ -23,7 +23,6 @@ const (
 
 // Default values
 const (
-	DefaultExampleDomain   = "example.com"
 	DefaultProto           = "http"
 	DefaultForwardedPrefix = "host="
 )

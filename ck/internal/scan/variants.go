@@ -6,7 +6,6 @@ import (
 	"os"
 	"strings"
 
-	constants "github.com/selimozcann/cachekeyhunter/ck/internal/constant"
 	"github.com/selimozcann/cachekeyhunter/ck/internal/types"
 )
 
@@ -20,27 +19,19 @@ func GenerateHeaderVariants(wordlistPath string) []types.Variant {
 
 	lines, _ := loadLines(wordlistPath)
 	for _, line := range lines {
+		parts := strings.SplitN(line, ":", 2)
+		if len(parts) != 2 {
+			continue
+		}
+
+		key := strings.TrimSpace(parts[0])
+		value := strings.TrimSpace(parts[1])
+
 		variants = append(variants, types.Variant{
-			Name:    fmt.Sprintf("%s: %s", line, constants.DefaultExampleDomain),
-			Headers: map[string]string{line: constants.DefaultExampleDomain},
+			Name:    fmt.Sprintf("%s: %s", key, value),
+			Headers: map[string]string{key: value},
 		})
 	}
-
-	// Add hardcoded Forwarded and X-Forwarded-Proto variants
-	variants = append(variants,
-		types.Variant{
-			Name: fmt.Sprintf("%s: host=%s", constants.HeaderForwarded, constants.DefaultExampleDomain),
-			Headers: map[string]string{
-				constants.HeaderForwarded: constants.DefaultForwardedPrefix + constants.DefaultExampleDomain,
-			},
-		},
-		types.Variant{
-			Name: fmt.Sprintf("%s: %s", constants.HeaderXForwardedProto, constants.DefaultProto),
-			Headers: map[string]string{
-				constants.HeaderXForwardedProto: constants.DefaultProto,
-			},
-		},
-	)
 
 	return variants
 }
