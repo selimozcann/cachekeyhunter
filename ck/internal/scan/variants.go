@@ -14,6 +14,10 @@ import (
 func GenerateHeaderVariants(wordlistPath string) []types.Variant {
 	var variants []types.Variant
 
+	if wordlistPath == "" {
+		return variants
+	}
+
 	lines, _ := loadLines(wordlistPath)
 	for _, line := range lines {
 		variants = append(variants, types.Variant{
@@ -77,4 +81,3 @@ func loadLines(path string) ([]string, error) {
 	}
 	return lines, scanner.Err()
 }
-
